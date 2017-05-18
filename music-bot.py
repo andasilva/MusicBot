@@ -1,4 +1,4 @@
-"""Bot exemple qui répond à @greut."""
+"""Music bot which can communicate with YouTube"""
 
 import asyncio
 import json
@@ -15,7 +15,7 @@ HEADERS = {
 }
 
 async def api_call(path, method="GET", **kwargs):
-    """Effectue une  requête sur l'API REST de Discord."""
+    """Do a request on the Discord's REST API."""
     default = {"headers": HEADERS}
     kwargs = dict(default, **kwargs)
     with aiohttp.ClientSession() as session:
@@ -26,18 +26,17 @@ async def api_call(path, method="GET", **kwargs):
                 return {}
             else:
                 body = await response.text()
-                raise AssertionError(f"{response.status} {response.reason} was unexpected.\n{body}")   
+                raise AssertionError(f"{response.status} {response.reason} was unexpected.\n{body}")
 
 async def send_message(recipient_id, content):
-    """Envoie un message à l'utilisateur donné."""
+    """Send a message to the given user."""
     channel = await api_call("/users/@me/channels", "POST", json={"recipient_id": recipient_id})
     return await api_call(f"/channels/{channel['id']}/messages", "POST", json={"content": content})
 
-# Pas très joli, mais ça le fait.
 last_sequence = None
 
 async def heartbeat(ws, interval):
-    """Tâche qui informe Discord de notre présence."""
+    """Keep alive the connexion with Discord."""
     while True:
         await asyncio.sleep(interval / 1000)
         print("> Heartbeat")
@@ -46,16 +45,16 @@ async def heartbeat(ws, interval):
 
 
 async def identify(ws):
-    """Tâche qui identifie le bot à la Web Socket (indispensable)."""
+    """Identifie the bot with the Web Socket (essential)."""
     await ws.send_json({'op': 2,  # Identify
                         'd': {'token': TOKEN,
                               'properties': {},
-                              'compress': True,  # implique le bout de code lié à zlib, pas nécessaire.
+                              'compress': True,  # imply the code snippet linked to zlib, not necessary.
                               'large_threshold': 250}})
         
 async def start(ws):
-    """Lance le bot sur l'adresse Web Socket donnée."""
-    global last_sequence  # global est nécessaire pour modifier la variable
+    """Start the bot with the given Web Socket address."""
+    global last_sequence  # global is necessary in order to modify the variable
     with aiohttp.ClientSession() as session:
         async with session.ws_connect(f"{ws}?v=5&encoding=json") as ws:
             async for msg in ws:
@@ -82,7 +81,7 @@ async def start(ws):
                             
                             if data['d']['content'] == 'quit':
                                 print('Bye bye!')
-                                # On l'attend l'envoi du message ci-dessus.
+                                # Wait for the message to be sent
                                 await asyncio.wait([task])
                                 break
                     else:
@@ -96,7 +95,7 @@ async def main():
     await start(response['url'])
 
     
-# Lancer le programme.
+# Launch the program 
 loop = asyncio.get_event_loop()
 loop.set_debug(True)
 loop.run_until_complete(main())
