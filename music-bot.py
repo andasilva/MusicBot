@@ -56,7 +56,7 @@ async def start(ws):
     """Start the bot with the given Web Socket address."""
     global last_sequence  # global is necessary in order to modify the variable
     with aiohttp.ClientSession() as session:
-        async with session.ws_connect(f"{ws}?v=5&encoding=json") as ws:
+        async with session.ws_connect(f"{ws}?v=6&encoding=json") as ws:
             async for msg in ws:
                 if msg.tp == aiohttp.WSMsgType.TEXT:
                     data = json.loads(msg.data)
