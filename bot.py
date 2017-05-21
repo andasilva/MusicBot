@@ -70,11 +70,11 @@ async def startBot(ws, token):
                     if data['t'] == "MESSAGE_CREATE":
                         if conf.commands.__contains__(data['d']['content'].partition(' ')[0]): # Make sure the command exist
                             try:
-                                content = await conf.commands[data['d']['content'].partition(' ')[0]](data['d']['content'].partition(' ')[2]) # Command with arg
+                                content = await conf.commands[data['d']['content'].partition(' ')[0]]()  # Command without arg
                             except:
-                                content = await conf.commands[data['d']['content'].partition(' ')[0]]() # Command without arg
+                                content = await conf.commands[data['d']['content'].partition(' ')[0]](data['d']['content'].partition(' ')[2]) # Command with arg
 
-                            if data['d']['author']['username'] != 'music-bot': # Send the retrieved data to the user, not to the bot
+                            if data['d']['author']['username'] != 'music-bot' and content != {}: # Send the retrieved data to the user, not to the bot
                                 asyncio.ensure_future(send_message(data['d']['author']['id'], content, token))
                         else: # shows the user how to access help
                             content = "Sorry, I don't know this command. You can try 'help' for more informations."

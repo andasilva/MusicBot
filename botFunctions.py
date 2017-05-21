@@ -17,9 +17,7 @@ async def searchArtistGenre(artistName):
 
 async def aboutMe():
     """Return various informations about the user."""
-    token = conf.getSpotifyToken('user-read-birthdate user-read-private user-read-email')
-
-    results = await spotifyAPI.api_call("https://api.spotify.com/v1/me", token)
+    results = await spotifyAPI.api_call("https://api.spotify.com/v1/me", conf.SPOTIFY_TOEKN)
 
     return "Id: " + results['id'] + \
            "\nEmail: " + results['email'] + \
@@ -29,9 +27,7 @@ async def aboutMe():
 
 async def currentlyPlaying():
     """Return which song is currently playing."""
-    token = conf.getSpotifyToken('user-read-currently-playing')
-
-    results = await spotifyAPI.api_call("https://api.spotify.com/v1/me/player/currently-playing", token)
+    results = await spotifyAPI.api_call("https://api.spotify.com/v1/me/player/currently-playing", conf.SPOTIFY_TOEKN)
 
     if results['is_playing']:
         return "Artist: " + results['item']['album']['artists'][0]['name'] + \
@@ -39,12 +35,37 @@ async def currentlyPlaying():
     else:
         return "There is currently no music played."
 
+async def remote_control(command):
+    """Play, pause, next or previous"""
+    method="PUT"
+    if command in ('next', 'previous'):
+        method = "POST"
+
+    results = await spotifyAPI.api_call(f"https://api.spotify.com/v1/me/player/{command}", conf.SPOTIFY_TOEKN, method)
+    return results
+
+async def volume(level):
+    """Set the volume for the user’s current playback device."""
+    try:
+        level = int(level)
+        results = await spotifyAPI.api_call(f"https://api.spotify.com/v1/me/player/volume?volume_percent={level}", conf.SPOTIFY_TOEKN, "PUT")
+        return results
+    except:
+        return "Please, enter a number between 0 and 100"
+
 async def hlep():
     """Display all the avaiable commands."""
-    resuts = "- currently_playing: \n" \
-             "Return informations about the music which is currently played\n\n" \
+    resuts = "- about_me: \n" \
+             "  Return various information about the user.\n\n" \
+             "- currently_playing: \n" \
+             "  Return informations about the music which is currently played.\n\n" \
              "- genre artistName: \n" \
              "  Return a list of music genre corresponding to the artistName. \n\n" \
-             "- about_me: \n" \
-             "  Return various information about the user."
+             "- help: \n" \
+             "  Display the help.\n\n" \
+             "- remote_control play/pause/next/previous: \n" \
+             "can play/pause the track, or go to the next/previous one of the playlist.\n\n" \
+             "- volume level: \n" \
+             "  Set the volume to level, with 0 <= level <= 100."
+
     return  resuts

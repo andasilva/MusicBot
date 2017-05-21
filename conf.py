@@ -22,8 +22,9 @@ SPOTIFY_URL = f"https://accounts.spotify.com/authorize/?" \
               f"scope=user-read-birthdate%20user-read-private%20user-read-email%20user-read-currently-playing&" \
               f"state=34fFs29kd09"
 
-def getSpotifyToken(scope):
-    return util.prompt_for_user_token('Spotify Username', scope=scope,
+SPOTIFY_SCOPE = 'user-read-birthdate user-read-private user-read-email user-read-currently-playing user-modify-playback-state'
+
+SPOTIFY_TOEKN = util.prompt_for_user_token('Spotify username', scope=SPOTIFY_SCOPE,
                                            client_id=SPOTIFY_CLIENT_ID,
                                            client_secret=SPOTIFY_CLIENT_SECRET,
                                            redirect_uri=SPOTIFY_REDIRECT_URI)
@@ -31,4 +32,6 @@ def getSpotifyToken(scope):
 commands = {'about_me': botFunctions.aboutMe,
             'currently_playing': botFunctions.currentlyPlaying,
             'genre': botFunctions.searchArtistGenre,
-            'help': botFunctions.hlep}
+            'help': botFunctions.hlep,
+            'remote_control': botFunctions.remote_control,
+            'volume': botFunctions.volume}
