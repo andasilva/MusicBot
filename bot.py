@@ -3,10 +3,10 @@
 import asyncio
 import json
 import zlib
-import  spotifyAPI
+import spotifyAPI
 import aiohttp
-
-from discordAPI import api_call
+import discordAPI
+import conf
 
 API_VERSION = 6
 
@@ -20,8 +20,8 @@ HEARTBEAT_ACK = 11
 
 async def send_message(recipient_id, content, token):
     """Send a message to the given user."""
-    channel = await api_call("/users/@me/channels", token, "POST", json={"recipient_id": recipient_id})
-    return await api_call(f"/channels/{channel['id']}/messages", token, "POST", json={"content": content})
+    channel = await discordAPI.api_call("/users/@me/channels", token, "POST", json={"recipient_id": recipient_id})
+    return await discordAPI.api_call(f"/channels/{channel['id']}/messages", token, "POST", json={"content": content})
 
 
 last_sequence = None
@@ -68,10 +68,18 @@ async def startBot(ws, token):
                 elif data['op'] == DISPATCH:
                     last_sequence = data['s']
                     if data['t'] == "MESSAGE_CREATE":
-                        if data['d']['content'][0:5] == 'genre':
-                            content = ', '.join(spotifyAPI.searchArtistStyle(data['d']['content'][6::]))
-                            asyncio.ensure_future(send_message(data['d']['author']['id'], content, token))
+                        if conf.commands.__contains__(data['d']['content'].partition(' ')[0]): # Make sure the command exist
+                            try:
+                                content = await conf.commands[data['d']['content'].partition(' ')[0]](data['d']['content'].partition(' ')[2]) # Command with arg
+                            except:
+                                content = await conf.commands[data['d']['content'].partition(' ')[0]]() # Command without arg
 
+                            if data['d']['author']['username'] != 'music-bot': # Send the retrieved data to the user, not to the bot
+                                asyncio.ensure_future(send_message(data['d']['author']['id'], content, token))
+                        else: # shows the user how to access help
+                            content = "Sorry, I don't know this command. You can try 'help' for more informations."
+                            if data['d']['author']['username'] != 'music-bot': # Send the retrieved data to the user, not to the bot
+                                asyncio.ensure_future(send_message(data['d']['author']['id'], content, token))
                     else:
                         print('Todo?', data['t'])
                 else:

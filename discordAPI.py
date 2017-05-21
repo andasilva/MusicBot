@@ -2,7 +2,8 @@
 
 from aiohttp import ClientSession
 
-from conf import URL
+from conf import DISCORD_URL
+
 
 async def api_call(path, token, method="GET", **kwargs):
     """Do a request on the Discord's REST API."""
@@ -16,7 +17,7 @@ async def api_call(path, token, method="GET", **kwargs):
     kwargs = dict(default, **kwargs)
 
     with ClientSession() as session:
-        async with session.request(method, f"{URL}{path}", **kwargs) as response:
+        async with session.request(method, f"{DISCORD_URL}{path}", **kwargs) as response:
             if 200 == response.status:
                 return await response.json()
             elif 204 == response.status:
