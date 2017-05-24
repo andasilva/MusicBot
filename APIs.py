@@ -1,25 +1,17 @@
-"""Spotify REST API tools."""
+"""API tools for Spotify and Discord."""
 
 from aiohttp import ClientSession
 
 
-async  def api_call(url, token, method="GET", **kwargs):
-    """Do a request on the Spotify's REST API."""
-    default = {
-        "headers": {
-            "Authorization": f"Bearer {token}",
-            "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
-        }
-    }
+async def api_call(url, header, method="GET", **kwargs):
+    """Do a request on the Discord's/Spotify's REST API."""
 
-    kwargs = dict(default, **kwargs)
+    kwargs = dict(header, **kwargs)
 
     with ClientSession() as session:
         async with session.request(method, f"{url}", **kwargs) as response:
             if 200 == response.status:
                 return await response.json()
-            elif 202 == response.status:
-                return "Wait 5 seconds and retry."
             elif 204 == response.status:
                 return {}
             elif 403 == response.status:
