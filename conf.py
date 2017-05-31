@@ -1,13 +1,50 @@
 """Global configuration variables."""
 
+import spotipy.util
 import botFunctions
-import spotipy.util as util
 
+from selenium import webdriver
+
+
+########################
+#   GENERAL SETTINGS   #
+########################
+
+driver = webdriver.Chrome() # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
+
+#Dictionary for bot commands.
+commands = {'about_me': botFunctions.aboutMe,
+            'currently_playing': botFunctions.currentlyPlaying,
+            'genre': botFunctions.searchArtistGenre,
+            'help': botFunctions.hlep,
+            'pause': botFunctions.pause,
+            'play': botFunctions.play,
+            'remote_control': botFunctions.remote_control,
+            'skip': botFunctions.skip,
+            'vol': botFunctions.vol,
+            'volume': botFunctions.volume}
+
+
+########################
+#   DISCORD SETTINGS   #
+########################
 
 DISCORD_URL = "https://discordapp.com/api"
 """Discord HTTP API endpoint."""
 
 DISCORD_TOKEN = ...
+
+DISCORD_HEADER = {
+    "headers": {
+        "Authorization": f"Bot {DISCORD_TOKEN}",
+        "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
+    }
+}
+
+
+########################
+#   SPOTIFY SETTINGS   #
+########################
 
 SPOTIFY_CLIENT_ID = ...
 
@@ -24,14 +61,14 @@ SPOTIFY_URL = f"https://accounts.spotify.com/authorize/?" \
 
 SPOTIFY_SCOPE = 'user-read-birthdate user-read-private user-read-email user-read-currently-playing user-modify-playback-state'
 
-SPOTIFY_TOEKN = util.prompt_for_user_token('Spotify username', scope=SPOTIFY_SCOPE,
-                                           client_id=SPOTIFY_CLIENT_ID,
-                                           client_secret=SPOTIFY_CLIENT_SECRET,
-                                           redirect_uri=SPOTIFY_REDIRECT_URI)
+SPOTIFY_TOKEN = spotipy.util.prompt_for_user_token('USERNAME', scope=SPOTIFY_SCOPE,
+                                                   client_id=SPOTIFY_CLIENT_ID,
+                                                   client_secret=SPOTIFY_CLIENT_SECRET,
+                                                   redirect_uri=SPOTIFY_REDIRECT_URI)
 
-commands = {'about_me': botFunctions.aboutMe,
-            'currently_playing': botFunctions.currentlyPlaying,
-            'genre': botFunctions.searchArtistGenre,
-            'help': botFunctions.hlep,
-            'remote_control': botFunctions.remote_control,
-            'volume': botFunctions.volume}
+SPOTIFY_HEADER = {
+    "headers": {
+        "Authorization": f"Bearer {SPOTIFY_TOKEN}",
+        "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
+    }
+}

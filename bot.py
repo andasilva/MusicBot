@@ -3,9 +3,8 @@
 import asyncio
 import json
 import zlib
-import spotifyAPI
+import APIs
 import aiohttp
-import discordAPI
 import conf
 
 API_VERSION = 6
@@ -20,8 +19,8 @@ HEARTBEAT_ACK = 11
 
 async def send_message(recipient_id, content, token):
     """Send a message to the given user."""
-    channel = await discordAPI.api_call("/users/@me/channels", token, "POST", json={"recipient_id": recipient_id})
-    return await discordAPI.api_call(f"/channels/{channel['id']}/messages", token, "POST", json={"content": content})
+    channel = await APIs.api_call(conf.DISCORD_URL + "/users/@me/channels", conf.DISCORD_HEADER, "POST", json={"recipient_id": recipient_id})
+    return await APIs.api_call(conf.DISCORD_URL + f"/channels/{channel['id']}/messages", conf.DISCORD_HEADER, "POST", json={"content": content})
 
 
 last_sequence = None
