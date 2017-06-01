@@ -1,29 +1,13 @@
 """Global configuration variables."""
 
 import spotipy.util
-import bot_functions
-
-from selenium import webdriver
 
 
 ########################
 #   GENERAL SETTINGS   #
 ########################
 
-driver = webdriver.Chrome() # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
-
-#Dictionary for bot commands.
-commands = {'about_me': bot_functions.aboutMe,
-            'currently_playing': bot_functions.currentlyPlaying,
-            'help': bot_functions.hlep,
-            'pause': bot_functions.pause,
-            'play': bot_functions.play,
-            'remote_control': bot_functions.remote_control,
-            'search': bot_functions.searchArtist,
-            'skip': bot_functions.skip,
-            'vol': bot_functions.vol,
-            'volume': bot_functions.volume}
-
+driver = None
 
 CHANNEL_ID = '...'
 

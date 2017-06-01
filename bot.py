@@ -1,11 +1,12 @@
 """Music bot which can communicate with YouTube"""
 
+import aiohttp
 import asyncio
+import bot_functions
+import conf
 import json
 import zlib
-import apis
-import aiohttp
-import conf
+
 
 API_VERSION = 6
 
@@ -67,11 +68,11 @@ async def startBot(webSocket, discord_client, spotify_client):
                 elif data['op'] == DISPATCH:
                     last_sequence = data['s']
                     if data['t'] == "MESSAGE_CREATE" and data['d']['channel_id'] == conf.CHANNEL_ID: # Make sure we're in the right channel
-                        if conf.commands.__contains__(data['d']['content'].partition(' ')[0]): # Make sure the command exist
+                        if dir(bot_functions).__contains__(data['d']['content'].partition(' ')[0]): # Make sure the command exist
                             try:
-                                content = await conf.commands[data['d']['content'].partition(' ')[0]](spotify_client)  # Command without arg
+                                content = await getattr(bot_functions, data['d']['content'].partition(' ')[0])(spotify_client) # Command without arg
                             except:
-                                content = await conf.commands[data['d']['content'].partition(' ')[0]](spotify_client, data['d']['content'].partition(' ')[2]) # Command with arg
+                                content = await getattr(bot_functions, data['d']['content'].partition(' ')[0])(data['d']['content'].partition(' ')[2], spotify_client) # Command with arg
                             if data['d']['author']['username'] != 'music-bot' and content != {}: # Send the retrieved data to the user, not to the bot
                                 asyncio.ensure_future(send_message(data['d']['author']['id'], content, discord_client))
                         else: # shows the user how to access help

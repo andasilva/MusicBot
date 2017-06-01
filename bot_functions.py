@@ -1,23 +1,21 @@
 """Bot functions."""
 
 import conf
-import json
+
+from selenium import webdriver
 
 
-async def searchArtist(spotify_client, artistName):
+async def searchArtist(artistName, spotify_client):
     """Return various informations about the artist searched."""
+    results = await spotify_client.api_call(f"/search?q={artistName}&type=artist")
 
-    try:
-        json.loads(artistName) # Make sure we found an artist
-
-        artistName = artistName.replace(" ", "%20")
-        results = await spotify_client.api_call(f"/search?q={artistName}&type=artist")
-
+    if results['artists']['items'] != []:
         return "Artist: " + results['artists']['items'][0]['name'] + "\n" \
-               "Genre: " + ''.join(results['artists']['items'][0]['genres']) + \
-               "\n" + results['artists']['items'][0]['images'][0]['url']
-    except:
-        return "Sorry, artist not found!"
+           "Genre: " + ''.join(results['artists']['items'][0]['genres']) + \
+           "\n" + results['artists']['items'][0]['images'][0]['url']
+
+    return "Sorry, artist not found!"
+
 
 async def aboutMe(spotify_client):
     """Return various informations about the user."""
@@ -60,43 +58,48 @@ async def pause(spotify_client):
 
 def playPause(command):
     """Start/Stop the music."""
-    playPause = conf.driver.find_element_by_class_name(f"spoticon-{command}-16")
-    playPause.click()
-    return {}
+    if isDriverRunning() == True:
+        playPause = conf.driver.find_element_by_class_name(f"spoticon-{command}-16")
+        playPause.click()
+        return {}
+    return isDriverRunning()
 
 
-async def skip(spotify_client, command):
+async def skip(command, *args):
     """Skip back/forward for non premium users."""
-    try:
-        skip = conf.driver.find_element_by_class_name(f"spoticon-skip-{command}-16")
-        skip.click()
-        if command == 'back':
-            skip.click() # one clik only restart the current music
-        return {}
-    except:
-        return "Sorry, the only args avaiable for 'skip' are 'back' and 'forward'"
+    if isDriverRunning() == True:
+        try:
+            skip = conf.driver.find_element_by_class_name(f"spoticon-skip-{command}-16")
+            skip.click()
+            if command == 'back':
+                skip.click() # one clik only restart the current music
+            return {}
+        except:
+            return "Sorry, the only args avaiable for 'skip' are 'back' and 'forward'"
+    return isDriverRunning()
 
-
-async def vol(spotify_client, level):
+async def vol(level, *args):
     """Set the  volume for non premium users."""
-    try:
-        level = int(level)
-        assert 0 <= level <= 100
-        volume = conf.driver.find_elements_by_class_name("progress-bar__fg")[1]
-        actions = conf.webdriver.ActionChains(conf.driver)
-        actions.move_to_element_with_offset(volume, level, 0)
-        actions.click()
-        actions.perform()
-        return {}
-    except:
-        return "Please, enter a number between 0 and 100"
+    if isDriverRunning() == True:
+        try:
+            level = int(level)
+            assert 0 <= level <= 100
+            volume = conf.driver.find_elements_by_class_name("progress-bar__fg")[1]
+            actions = conf.webdriver.ActionChains(conf.driver)
+            actions.move_to_element_with_offset(volume, level, 0)
+            actions.click()
+            actions.perform()
+            return {}
+        except:
+            return "Please, enter a number between 0 and 100"
+    return isDriverRunning()
 
 
 ######################################
 #  SPOTIFY PREMIUM ACCOUNT REQUIRED  #
 ######################################
 
-async def remote_control(spotify_client, command):
+async def remote_control(command, spotify_client):
     """Play, pause, next or previous"""
     method = None
     if command in ('next', 'previous'):
@@ -108,7 +111,7 @@ async def remote_control(spotify_client, command):
     return results
 
 
-async def volume(spotify_client, level):
+async def volume(level, spotify_client):
     """Set the volume for the user’s current playback device."""
     try:
         level = int(level)
@@ -122,29 +125,58 @@ async def volume(spotify_client, level):
 #   HELP   #
 ############
 
-async def hlep(*args):
+async def help(*args):
     """Display all the avaiable commands."""
 
     results = """
-    ```- about_me: \n
+    ```- about_me:
     Return various information about the user.```
-    ```- currently_playing: \n
+    ```- currently_playing: 
     Return informations about the music which is currently played.```
-    ```- help: \n
+    ```- help: 
       Display the help.```
-    ```- search artistName: \n
+    ```- search artistName: 
     Return various informations about the artist searched.``` 
-    ```- skip back/forward: \n
+    ```- skip back/forward: 
       Can go to the next/previous track of the playlist without a Spotify premium account.``` 
-    ```- pause: \n
+    ```- pause: 
       Can pause the track without a Spotify premium account.``` 
-    ```- play: \n
+    ```- play: 
       Can play the track without a Spotify premium account.``` 
-    ```- vol level: \n
+    ```- vol level: 
       Set the volume to level without a Spotify premium account, with 0 <= level <= 100.``` 
     **---------- SPOTIFY PREMIUM ACCOUNT REQUIRED ----------**
-    ```- remote_control play/pause/next/previous: \n
+    ```- remote_control play/pause/next/previous: 
       can play/pause the track, or go to the next/previous one of the playlist.```
-    ```- volume level: \n
+    ```- volume level: 
       Set the volume to level, with 0 <= level <= 100.```"""
     return results
+
+
+################
+#  WEB DRIVER  #
+################
+
+async def openSpotify(*args):
+    """Start a webdriver and go on Spotify wepage."""
+    conf.driver = webdriver.Chrome() # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
+    conf.driver.get("https://open.spotify.com/browse/featured")
+
+    hasAccount = conf.driver.find_element_by_id('has-account')
+    hasAccount.click()
+
+    loginUsr = conf.driver.find_element_by_id('login-usr')
+    loginUsr.clear()
+    loginUsr.send_keys("") # Optional
+
+    loginPass = conf.driver.find_element_by_id('login-pass')
+    loginPass.clear()
+    loginPass.send_keys("") # Optional
+
+    return {}
+
+def isDriverRunning():
+    """Check if the driver is running"""
+    if conf.driver != None:
+        return True
+    return "Please, start the webdriver with the following command: ```open_spotify```"
