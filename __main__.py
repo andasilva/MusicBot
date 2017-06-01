@@ -4,7 +4,7 @@ import asyncio
 import conf
 
 from bot import startBot
-from APIs import api_call
+from apis import api_call
 
 
 async def mainLoop(token):

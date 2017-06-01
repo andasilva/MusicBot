@@ -3,7 +3,7 @@
 import asyncio
 import json
 import zlib
-import APIs
+import apis
 import aiohttp
 import conf
 
@@ -19,8 +19,8 @@ HEARTBEAT_ACK = 11
 
 async def send_message(recipient_id, content, token):
     """Send a message to the given user."""
-    channel = await APIs.api_call(conf.DISCORD_URL + "/users/@me/channels", conf.DISCORD_HEADER, "POST", json={"recipient_id": recipient_id})
-    return await APIs.api_call(conf.DISCORD_URL + f"/channels/{channel['id']}/messages", conf.DISCORD_HEADER, "POST", json={"content": content})
+    channel = await apis.api_call(conf.DISCORD_URL + "/users/@me/channels", conf.DISCORD_HEADER, "POST", json={"recipient_id": recipient_id})
+    return await apis.api_call(conf.DISCORD_URL + f"/channels/{channel['id']}/messages", conf.DISCORD_HEADER, "POST", json={"content": content})
 
 
 last_sequence = None

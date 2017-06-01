@@ -1,7 +1,7 @@
 """Bot functions."""
 
 import spotipy
-import APIs
+import apis
 import conf
 
 
@@ -21,7 +21,7 @@ async def searchArtistGenre(artistName):
 
 async def aboutMe():
     """Return various informations about the user."""
-    results = await APIs.api_call("https://api.spotify.com/v1/me", conf.SPOTIFY_HEADER)
+    results = await apis.api_call("https://api.spotify.com/v1/me", conf.SPOTIFY_HEADER)
 
     return "Id: " + results['id'] + \
            "\nEmail: " + results['email'] + \
@@ -32,7 +32,7 @@ async def aboutMe():
 
 async def currentlyPlaying():
     """Return which song is currently playing."""
-    results = await APIs.api_call("https://api.spotify.com/v1/me/player/currently-playing", conf.SPOTIFY_HEADER)
+    results = await apis.api_call("https://api.spotify.com/v1/me/player/currently-playing", conf.SPOTIFY_HEADER)
 
     if results['is_playing']:
         return "Artist: " + results['item']['album']['artists'][0]['name'] + \
@@ -101,7 +101,7 @@ async def remote_control(command):
     if command in ('next', 'previous'):
         method = "POST"
 
-    results = await APIs.api_call(f"https://api.spotify.com/v1/me/player/{command}", conf.SPOTIFY_HEADER, method)
+    results = await apis.api_call(f"https://api.spotify.com/v1/me/player/{command}", conf.SPOTIFY_HEADER, method)
     return results
 
 
@@ -109,7 +109,7 @@ async def volume(level):
     """Set the volume for the user’s current playback device."""
     try:
         level = int(level)
-        results = await APIs.api_call(f"https://api.spotify.com/v1/me/player/volume?volume_percent={level}", conf.SPOTIFY_HEADER, "PUT")
+        results = await apis.api_call(f"https://api.spotify.com/v1/me/player/volume?volume_percent={level}", conf.SPOTIFY_HEADER, "PUT")
         return results
     except:
         return "Please, enter a number between 0 and 100"
