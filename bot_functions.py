@@ -1,27 +1,27 @@
 """Bot functions."""
 
-import spotipy
-import apis
 import conf
+import json
 
 
-async def searchArtistGenre(artistName):
-    """Return a list of music genre corresponding to the artistName."""
-    if artistName == '':
-        return "You must enter an artist name!"
-
-    spotify = spotipy.Spotify()
-    results = spotify.search(q='artist:' + artistName, type='artist')
+async def searchArtist(spotify_client, artistName):
+    """Return various informations about the artist searched."""
 
     try:
-        return ', '.join(results['artists']['items'][0]['genres'])
+        json.loads(artistName) # Make sure we found an artist
+
+        artistName = artistName.replace(" ", "%20")
+        results = await spotify_client.api_call(f"/search?q={artistName}&type=artist")
+
+        return "Artist: " + results['artists']['items'][0]['name'] + "\n" \
+               "Genre: " + ''.join(results['artists']['items'][0]['genres']) + \
+               "\n" + results['artists']['items'][0]['images'][0]['url']
     except:
         return "Sorry, artist not found!"
 
-
-async def aboutMe():
+async def aboutMe(spotify_client):
     """Return various informations about the user."""
-    results = await apis.api_call("https://api.spotify.com/v1/me", conf.SPOTIFY_HEADER)
+    results = await spotify_client.api_call("/me")
 
     return "Id: " + results['id'] + \
            "\nEmail: " + results['email'] + \
@@ -30,28 +30,29 @@ async def aboutMe():
            "\nUri: " + results['uri']
 
 
-async def currentlyPlaying():
+async def currentlyPlaying(spotify_client):
     """Return which song is currently playing."""
-    results = await apis.api_call("https://api.spotify.com/v1/me/player/currently-playing", conf.SPOTIFY_HEADER)
+    results = await spotify_client.api_call("/me/player/currently-playing")
 
     if results['is_playing']:
-        return "Artist: " + results['item']['album']['artists'][0]['name'] + \
+        return "Artist: " + results['item']['album']['artists'][0]['name'] + "\n" \
+               "Title: " + results['item']['name'] + \
                "\nAlbum cover: " + results['item']['album']['images'][0]['url']
     else:
         return "There is currently no music played."
 
 
-async def play():
+async def play(spotify_client):
     """Play for non premium users."""
-    if await currentlyPlaying() != "There is currently no music played.":
+    if await currentlyPlaying(spotify_client) != "There is currently no music played.":
         return "Music's already playing."
 
     return playPause('play')
 
 
-async def pause():
+async def pause(spotify_client):
     """Pause for non premium users."""
-    if await currentlyPlaying() == "There is currently no music played.":
+    if await currentlyPlaying(spotify_client) == "There is currently no music played.":
         return "Music's already paused."
 
     return playPause('pause')
@@ -64,7 +65,7 @@ def playPause(command):
     return {}
 
 
-async def skip(command):
+async def skip(spotify_client, command):
     """Skip back/forward for non premium users."""
     try:
         skip = conf.driver.find_element_by_class_name(f"spoticon-skip-{command}-16")
@@ -76,7 +77,7 @@ async def skip(command):
         return "Sorry, the only args avaiable for 'skip' are 'back' and 'forward'"
 
 
-async def vol(level):
+async def vol(spotify_client, level):
     """Set the  volume for non premium users."""
     try:
         level = int(level)
@@ -95,21 +96,23 @@ async def vol(level):
 #  SPOTIFY PREMIUM ACCOUNT REQUIRED  #
 ######################################
 
-async def remote_control(command):
+async def remote_control(spotify_client, command):
     """Play, pause, next or previous"""
-    method="PUT"
+    method = None
     if command in ('next', 'previous'):
         method = "POST"
+    else:
+        method = "PUT"
 
-    results = await apis.api_call(f"https://api.spotify.com/v1/me/player/{command}", conf.SPOTIFY_HEADER, method)
+    results = await spotify_client.api_call(f"/me/player/{command}", method)
     return results
 
 
-async def volume(level):
+async def volume(spotify_client, level):
     """Set the volume for the user’s current playback device."""
     try:
         level = int(level)
-        results = await apis.api_call(f"https://api.spotify.com/v1/me/player/volume?volume_percent={level}", conf.SPOTIFY_HEADER, "PUT")
+        results = await spotify_client.api_call(f"/me/player/volume?volume_percent={level}", "PUT")
         return results
     except:
         return "Please, enter a number between 0 and 100"
@@ -119,28 +122,29 @@ async def volume(level):
 #   HELP   #
 ############
 
-async def hlep():
+async def hlep(*args):
     """Display all the avaiable commands."""
 
-    results = """- about_me: \n
-                Return various information about the user.\n\n
-              - currently_playing: \n
-                Return informations about the music which is currently played.\n\n
-              - genre artistName: \n
-                Return a list of music genre corresponding to the artistName. \n\n
-              - help: \n
-                Display the help.\n\n
-              - skip back/forward: \n
-                Can go to the next/previous track of the playlist without a Spotify premium account \n\n
-              - pause: \n
-                Can pause the track without a Spotify premium account. \n\n
-              - play: \n
-               Can play the track without a Spotify premium account. \n\n
-              - vol level: \n
-               Set the volume to level without a Spotify premium account, with 0 <= level <= 100. \n\n
-              ------ SPOTIFY PREMIUM ACCOUNT REQUIRED ------\n\n
-              - remote_control play/pause/next/previous: \n
-              can play/pause the track, or go to the next/previous one of the playlist.\n\n
-              - volume level: \n
-                Set the volume to level, with 0 <= level <= 100."""
+    results = """
+    ```- about_me: \n
+    Return various information about the user.```
+    ```- currently_playing: \n
+    Return informations about the music which is currently played.```
+    ```- help: \n
+      Display the help.```
+    ```- search artistName: \n
+    Return various informations about the artist searched.``` 
+    ```- skip back/forward: \n
+      Can go to the next/previous track of the playlist without a Spotify premium account.``` 
+    ```- pause: \n
+      Can pause the track without a Spotify premium account.``` 
+    ```- play: \n
+      Can play the track without a Spotify premium account.``` 
+    ```- vol level: \n
+      Set the volume to level without a Spotify premium account, with 0 <= level <= 100.``` 
+    **---------- SPOTIFY PREMIUM ACCOUNT REQUIRED ----------**
+    ```- remote_control play/pause/next/previous: \n
+      can play/pause the track, or go to the next/previous one of the playlist.```
+    ```- volume level: \n
+      Set the volume to level, with 0 <= level <= 100.```"""
     return results

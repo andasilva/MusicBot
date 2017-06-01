@@ -1,7 +1,7 @@
 """Global configuration variables."""
 
 import spotipy.util
-import botFunctions
+import bot_functions
 
 from selenium import webdriver
 
@@ -13,42 +13,35 @@ from selenium import webdriver
 driver = webdriver.Chrome() # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
 
 #Dictionary for bot commands.
-commands = {'about_me': botFunctions.aboutMe,
-            'currently_playing': botFunctions.currentlyPlaying,
-            'genre': botFunctions.searchArtistGenre,
-            'help': botFunctions.hlep,
-            'pause': botFunctions.pause,
-            'play': botFunctions.play,
-            'remote_control': botFunctions.remote_control,
-            'skip': botFunctions.skip,
-            'vol': botFunctions.vol,
-            'volume': botFunctions.volume}
+commands = {'about_me': bot_functions.aboutMe,
+            'currently_playing': bot_functions.currentlyPlaying,
+            'help': bot_functions.hlep,
+            'pause': bot_functions.pause,
+            'play': bot_functions.play,
+            'remote_control': bot_functions.remote_control,
+            'search': bot_functions.searchArtist,
+            'skip': bot_functions.skip,
+            'vol': bot_functions.vol,
+            'volume': bot_functions.volume}
+
+
+CHANNEL_ID = '...'
 
 
 ########################
 #   DISCORD SETTINGS   #
 ########################
 
-DISCORD_URL = "https://discordapp.com/api"
-"""Discord HTTP API endpoint."""
-
-DISCORD_TOKEN = ...
-
-DISCORD_HEADER = {
-    "headers": {
-        "Authorization": f"Bot {DISCORD_TOKEN}",
-        "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
-    }
-}
+DISCORD_TOKEN = '...'
 
 
 ########################
 #   SPOTIFY SETTINGS   #
 ########################
 
-SPOTIFY_CLIENT_ID = ...
+SPOTIFY_CLIENT_ID = '...'
 
-SPOTIFY_CLIENT_SECRET = ...
+SPOTIFY_CLIENT_SECRET = '...'
 
 SPOTIFY_REDIRECT_URI = 'https://discordapp.com/channels/@me'
 
@@ -65,10 +58,3 @@ SPOTIFY_TOKEN = spotipy.util.prompt_for_user_token('USERNAME', scope=SPOTIFY_SCO
                                                    client_id=SPOTIFY_CLIENT_ID,
                                                    client_secret=SPOTIFY_CLIENT_SECRET,
                                                    redirect_uri=SPOTIFY_REDIRECT_URI)
-
-SPOTIFY_HEADER = {
-    "headers": {
-        "Authorization": f"Bearer {SPOTIFY_TOKEN}",
-        "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
-    }
-}
