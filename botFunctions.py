@@ -121,6 +121,7 @@ async def volume(level):
 
 async def hlep():
     """Display all the avaiable commands."""
+
     results = """- about_me: \n
                 Return various information about the user.\n\n
               - currently_playing: \n
@@ -142,5 +143,4 @@ async def hlep():
               can play/pause the track, or go to the next/previous one of the playlist.\n\n
               - volume level: \n
                 Set the volume to level, with 0 <= level <= 100."""
-
     return results

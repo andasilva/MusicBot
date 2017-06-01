@@ -20,6 +20,13 @@ def openSpotify():
     hasAccount = conf.driver.find_element_by_id('has-account')
     hasAccount.click()
 
+    loginUsr = conf.driver.find_element_by_id('login-usr')
+    loginUsr.clear()
+    loginUsr.send_keys("SPOTIFY USERNAME") # Optional
+
+    loginPass = conf.driver.find_element_by_id('login-pass')
+    loginPass.clear()
+    loginPass.send_keys("SPOTIFY PASSWORD") # Optional
 
 if __name__ == "__main__":
     # Launch the program
