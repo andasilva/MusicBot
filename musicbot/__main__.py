@@ -2,9 +2,9 @@
 
 import asyncio
 
+import musicbot.conf as conf
 from musicbot.apis import DiscordClient, SpotifyClient
 from musicbot.bot import start_bot
-import musicbot.conf as conf
 
 
 async def mainLoop(discord_client, spotify_client):
