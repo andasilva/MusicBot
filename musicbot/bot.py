@@ -6,9 +6,6 @@ import zlib
 
 import aiohttp
 
-import bot_functions
-import conf
-
 API_VERSION = 6
 
 # https://discordapp.com/developers/docs/topics/gateway#gateway-op-codes

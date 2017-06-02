@@ -1,6 +1,5 @@
 """Bot functions."""
 
-import conf
 from selenium import webdriver
 
 
