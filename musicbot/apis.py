@@ -14,6 +14,7 @@ class RestClient:
         """Abstract api_call function."""
         raise NotImplementedError
 
+    @property
     def token(self):
         """Token getter."""
         return self._token
@@ -41,14 +42,16 @@ class DiscordClient(RestClient):
             async with session.request(
                     method,
                     f"{self.endpoint}{url}",
-                    **kwargs) as response:
+                    **kwargs
+            ) as response:
                 if response.status in (200, 204):
                     return await http_response_status(response)
                 else:
                     body = await response.text()
                     raise UnexpectedHttpStatusError(
                         response.status,
-                        response.reason, body)
+                        response.reason, body
+                    )
 
 
 class SpotifyClient(RestClient):
@@ -77,15 +80,16 @@ class SpotifyClient(RestClient):
                 if response.status in (200, 204):
                     return await http_response_status(response)
                 elif 403 == response.status:
-                    return """You must have a premium Spotify
-                              account for this feature."""
+                    return "You must have a premium Spotify " \
+                           "account for this feature."
                 elif 404 == response.status:
                     return "Error, device not found."
                 else:
                     body = await response.text()
                     raise UnexpectedHttpStatusError(
                         response.status,
-                        response.reason, body)
+                        response.reason, body
+                    )
 
 
 class UnexpectedHttpStatusError(Exception):

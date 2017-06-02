@@ -1,14 +1,26 @@
 """Bot functions."""
 
+from urllib.parse import urlencode
+
 from selenium import webdriver
 
 from . import conf
 
 
-async def search_artist(artistName, spotify_client):
+async def search_artist(*args):
     """Return various informations about the artist searched."""
+    spotify_client = args[0]
+    artistName = args[1]
+
+    url = urlencode(
+        {"q": artistName, "type": "artist"},
+        doseq=True,
+        encoding='utf-8'
+    )
+
     results = await spotify_client.api_call(
-        f"/search?q={artistName}&type=artist")
+        f"/search?{url}"
+    )
 
     if results['artists']['items'] != []:
         return "Artist: " + results['artists']['items'][0]['name'] + "\n" \
@@ -18,8 +30,9 @@ async def search_artist(artistName, spotify_client):
     return "Sorry, artist not found!"
 
 
-async def about_me(spotify_client):
+async def about_me(*args):
     """Return various informations about the user."""
+    spotify_client = args[0]
     results = await spotify_client.api_call("/me")
 
     return "Id: " + results['id'] + \
@@ -29,8 +42,9 @@ async def about_me(spotify_client):
            "\nUri: " + results['uri']
 
 
-async def currently_playing(spotify_client):
+async def currently_playing(*args):
     """Return which song is currently playing."""
+    spotify_client = args[0]
     results = await spotify_client.api_call("/me/player/currently-playing")
 
     if results['is_playing']:
@@ -44,19 +58,21 @@ async def currently_playing(spotify_client):
         return "There is currently no music played."
 
 
-async def play(spotify_client):
+async def play(*args):
     """Play for non premium users."""
-    if await (currently_playing(spotify_client) !=
-              "There is currently no music played."):
+    spotify_client = args[0]
+    if (await currently_playing(spotify_client) !=
+            "There is currently no music played."):
         return "Music's already playing."
 
     return play_pause('play')
 
 
-async def pause(spotify_client):
+async def pause(*args):
     """Pause for non premium users."""
-    if await (currently_playing(spotify_client) ==
-              "There is currently no music played."):
+    spotify_client = args[0]
+    if (await currently_playing(spotify_client) ==
+            "There is currently no music played."):
         return "Music's already paused."
 
     return play_pause('pause')
@@ -69,33 +85,41 @@ def play_pause(command):
             f"spoticon-{command}-16")
         playPause.click()
         return {}
-    return is_driver_running()
+    return "Please, start the webdriver with " \
+           "the following command: ```open_spotify```" \
+           "and login to spotify"
 
 
-async def skip(command, *args):
+async def skip(*args):
     """Skip back/forward for non premium users."""
+    command = args[1]
     if is_driver_running() is True:
         try:
+            print(*args)
             skip = conf.driver.find_element_by_class_name(
-                f"spoticon-skip-{command}-16")
+                f"spoticon-skip-{command}-16"
+            )
             skip.click()
             if command == 'back':
                 skip.click()  # one clik only restart the current music
             return {}
         except Exception:
-            return """"Sorry, the only args avaiable for
-                       'skip' are 'back' and 'forward'"""
-    return is_driver_running()
+            return "Sorry, the only args avaiable for " \
+                   "'skip' are 'back' and 'forward'"
+    return "Please, start the webdriver with " \
+           "the following command: ```open_spotify```"
 
 
-async def vol(level, *args):
+async def vol(*args):
     """Set the  volume for non premium users."""
+    level = args[1]
     if is_driver_running() is True:
         try:
             level = int(level)
             assert 0 <= level <= 100
             volume = conf.driver.find_elements_by_class_name(
-                "progress-bar__fg")[1]
+                "progress-bar__fg"
+            )[1]
             actions = conf.webdriver.ActionChains(conf.driver)
             actions.move_to_element_with_offset(volume, level, 0)
             actions.click()
@@ -103,15 +127,19 @@ async def vol(level, *args):
             return {}
         except Exception:
             return "Please, enter a number between 0 and 100"
-    return is_driver_running()
+    return "Please, start the webdriver with " \
+           "the following command: ```open_spotify```"
 
 
 ######################################
 #  SPOTIFY PREMIUM ACCOUNT REQUIRED  #
 ######################################
 
-async def remote_control(command, spotify_client):
+async def remote_control(*args):
     """Play, pause, next or previous."""
+    spotify_client = args[0]
+    command = args[1]
+
     method = None
     if command in ('next', 'previous'):
         method = "POST"
@@ -122,13 +150,16 @@ async def remote_control(command, spotify_client):
     return results
 
 
-async def volume(level, spotify_client):
+async def volume(*args):
     """Set the volume for the user’s current playback device."""
+    spotify_client = args[0]
+    level = args[1]
     try:
         level = int(level)
         results = await spotify_client.api_call(
             f"/me/player/volume?volume_percent={level}",
-            "PUT")
+            "PUT"
+        )
         return results
     except Exception:
         return "Please, enter a number between 0 and 100"
@@ -189,12 +220,9 @@ async def open_spotify(*args):
     loginPass.clear()
     loginPass.send_keys("")  # Optional
 
-    return {}
+    return "Spotify started, let's log you."
 
 
 def is_driver_running():
     """Check if the driver is running."""
-    if conf.driver is not None:
-        return True
-    return """Please, start the webdriver with
-              the following command: ```open_spotify```"""
+    return conf.driver is not None

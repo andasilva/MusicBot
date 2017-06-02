@@ -15,7 +15,7 @@ CHANNEL_ID = '...'
 #   DISCORD SETTINGS   #
 ########################
 
-DISCORD_TOKEN = '....'
+DISCORD_TOKEN = '...'
 
 
 ########################
@@ -42,7 +42,7 @@ S_SCOPE = """user-read-birthdate
              user-read-currently-playing
              user-modify-playback-state"""
 
-S_TOKEN = spotipy.util.prompt_for_user_token('dr.sinity',
+S_TOKEN = spotipy.util.prompt_for_user_token('...',
                                              scope=S_SCOPE,
                                              client_id=S_CLIENT_ID,
                                              client_secret=S_CLIENT_SECRET,

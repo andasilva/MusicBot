@@ -7,7 +7,7 @@ from musicbot.apis import DiscordClient, SpotifyClient
 from musicbot.bot import start_bot
 
 
-async def mainLoop(discord_client, spotify_client):
+async def main_loop(discord_client, spotify_client):
     """Run main program."""
     response = await discord_client.api_call("/gateway")
     await start_bot(response['url'], discord_client, spotify_client)
@@ -19,5 +19,5 @@ if __name__ == "__main__":
 
     loop = asyncio.get_event_loop()
     loop.set_debug(True)
-    loop.run_until_complete(mainLoop(discord_client, spotify_client))
+    loop.run_until_complete(main_loop(discord_client, spotify_client))
     loop.close()

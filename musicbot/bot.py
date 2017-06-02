@@ -23,12 +23,14 @@ async def send_message(recipient_id, content, discord_client):
     channel = await discord_client.api_call(
         "/users/@me/channels",
         "POST",
-        json={"recipient_id": recipient_id})
+        json={"recipient_id": recipient_id}
+    )
 
     return await discord_client.api_call(
         f"/channels/{channel['id']}/messages",
         "POST",
-        json={"content": content})
+        json={"content": content}
+    )
 
 
 last_sequence = None
@@ -39,13 +41,15 @@ async def heartbeat(web_socket, interval):
     while True:
         await asyncio.sleep(interval / 1000)
         print("> Heartbeat")
-        await web_socket.send_json({'op': HEARTBEAT,
-                                   'd': last_sequence})
+        await web_socket.send_json(
+            {'op': HEARTBEAT,
+             'd': last_sequence}
+        )
 
 
 async def identify(web_socket, token):
     """Identifie the bot with the Web Socket (essential)."""
-    json_object = {
+    await web_socket.send_json({
         'op': IDENTIFY,
         'd': {
             'token': token,
@@ -53,8 +57,7 @@ async def identify(web_socket, token):
             'compress': True,
             'large_threshold': 250
         }
-    }
-    await web_socket.send_json(json_object)
+    })
 
 
 async def start_bot(web_socket, discord_client, spotify_client):
@@ -75,8 +78,10 @@ async def start_bot(web_socket, discord_client, spotify_client):
                     asyncio.ensure_future(
                         heartbeat(
                             web_socket,
-                            data['d']['heartbeat_interval']))
-                    await identify(web_socket, discord_client.token())
+                            data['d']['heartbeat_interval']
+                        )
+                    )
+                    await identify(web_socket, discord_client.token)
 
                 elif data['op'] == HEARTBEAT_ACK:
                     print("< Heartbeat ACK")
@@ -92,22 +97,14 @@ async def start_bot(web_socket, discord_client, spotify_client):
 
                         # Make sure the command exist
                         if dir(bot_functions).__contains__(data_partition[0]):
-                            try:
-                                # Command without arg
-                                content = await getattr(
-                                    bot_functions,
-                                    data_partition[0])(spotify_client)
-                            except Exception:
-                                # Command with arg
-                                content = await getattr(
-                                    bot_functions,
-                                    data_partition[0])(
-                                    data_partition[2],
-                                    spotify_client)
 
-                            # Send the retrieved data to the user,
-                            #  not to the bot
-                            print(content)
+                            content = await getattr(
+                                bot_functions,
+                                data_partition[0]
+                            )(spotify_client, data_partition[2])
+
+                            # Send the retrieved data to
+                            # the user, not to the bot.
                             await send_data(content, data, discord_client)
 
                         else:  # shows the user how to access help
@@ -129,4 +126,6 @@ async def send_data(content, data, discord_client):
             send_message(
                 data['d']['author']['id'],
                 content,
-                discord_client))
+                discord_client
+            )
+        )
