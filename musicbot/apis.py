@@ -7,7 +7,7 @@ class RestClient:
     """Base class REST client used for different apis."""
 
     def __init__(self, token):
-        """init rest client."""
+        """Init rest client."""
         self.token = token
 
     async def api_call(self, url, method="GET", **kwargs):
@@ -15,7 +15,7 @@ class RestClient:
         raise NotImplementedError
 
     def token(self):
-        """token getter."""
+        """Token getter."""
         return self._token
 
 
@@ -23,7 +23,7 @@ class DiscordClient(RestClient):
     """Discord client for api calls."""
 
     def __init__(self, token):
-        """init discord client."""
+        """Init discord client."""
         super().__init__(token)
         self.endpoint = "https://discordapp.com/api"
         self.header = {
@@ -55,7 +55,7 @@ class SpotifyClient(RestClient):
     """Spotify client for api calls."""
 
     def __init__(self, token):
-        """init spotify client."""
+        """Init spotify client."""
         super().__init__(token)
         self.endpoint = "https://api.spotify.com/v1"
         self.header = {
