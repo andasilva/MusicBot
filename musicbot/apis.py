@@ -7,12 +7,15 @@ class RestClient:
     """Base class REST client used for different apis."""
 
     def __init__(self, token):
+        """init rest client."""
         self.token = token
 
     async def api_call(self, url, method="GET", **kwargs):
+        """Abstract api_call function."""
         raise NotImplementedError
 
     def token(self):
+        """token getter."""
         return self._token
 
 
@@ -20,6 +23,7 @@ class DiscordClient(RestClient):
     """Discord client for api calls."""
 
     def __init__(self, token):
+        """init discord client."""
         super().__init__(token)
         self.endpoint = "https://discordapp.com/api"
         self.header = {
@@ -51,6 +55,7 @@ class SpotifyClient(RestClient):
     """Spotify client for api calls."""
 
     def __init__(self, token):
+        """init spotify client."""
         super().__init__(token)
         self.endpoint = "https://api.spotify.com/v1"
         self.header = {
@@ -87,6 +92,7 @@ class UnexpectedHttpStatusError(Exception):
     """Exception raise for unexpected HTTP status response."""
 
     def __init__(self, status, reason, body):
+        """Init unexpected http status errors."""
         self.status = status
         self.reason = reason
         self.body = body

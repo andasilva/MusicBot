@@ -1,4 +1,4 @@
-"""Music bot which can communicate with YouTube"""
+"""Music bot which can communicate with YouTube."""
 
 import asyncio
 import json
@@ -117,7 +117,6 @@ async def startBot(webSocket, discord_client, spotify_client):
 
 async def sendData(content, data, discord_client):
     """Send the retrieved data to the user, not to the bot."""
-
     if data['d']['author']['username'] != 'music-bot':
         asyncio.ensure_future(
             send_message(

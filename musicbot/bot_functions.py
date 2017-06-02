@@ -110,7 +110,7 @@ async def vol(level, *args):
 ######################################
 
 async def remote_control(command, spotify_client):
-    """Play, pause, next or previous"""
+    """Play, pause, next or previous."""
     method = None
     if command in ('next', 'previous'):
         method = "POST"
@@ -139,7 +139,6 @@ async def volume(level, spotify_client):
 
 async def help(*args):
     """Display all the avaiable commands."""
-
     results = """
     ```- about_me:
     Return various information about the user.```
@@ -174,7 +173,6 @@ async def help(*args):
 
 async def openSpotify(*args):
     """Start a webdriver and go on Spotify wepage."""
-
     # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
     conf.driver = webdriver.Chrome()
     conf.driver.get("https://open.spotify.com/browse/featured")
@@ -194,7 +192,7 @@ async def openSpotify(*args):
 
 
 def isDriverRunning():
-    """Check if the driver is running"""
+    """Check if the driver is running."""
     if conf.driver is not None:
         return True
     return """Please, start the webdriver with
