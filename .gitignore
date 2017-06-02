@@ -101,3 +101,9 @@ ENV/
 .mypy_cache/
 
 .idea
+
+check.bash 
+
+.cache-dr.sinity
+
+geckodriver.log
