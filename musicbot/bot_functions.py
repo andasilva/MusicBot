@@ -2,6 +2,8 @@
 
 from selenium import webdriver
 
+import musicbot.conf as conf
+
 
 async def searchArtist(artistName, spotify_client):
     """Return various informations about the artist searched."""

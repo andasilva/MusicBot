@@ -16,7 +16,7 @@ class RestClient:
 
     def token(self):
         """Token getter."""
-        return self._token
+        return self.token
 
 
 class DiscordClient(RestClient):

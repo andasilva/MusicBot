@@ -6,6 +6,9 @@ import zlib
 
 import aiohttp
 
+import musicbot.bot_functions as bot_functions
+import musicbot.conf as conf
+
 API_VERSION = 6
 
 # https://discordapp.com/developers/docs/topics/gateway#gateway-op-codes
