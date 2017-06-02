@@ -93,7 +93,7 @@ class UnexpectedHttpStatusError(Exception):
 
 
 async def httpResponseStatus(response):
-    """Handle common http responses."""
+    """Handle common HTTP responses."""
     if 200 == response.status:
         return await response.json()
     elif 204 == response.status:
