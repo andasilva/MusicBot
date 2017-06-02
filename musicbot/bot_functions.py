@@ -2,7 +2,7 @@
 
 from selenium import webdriver
 
-import musicbot.conf as conf
+from . import conf
 
 
 async def search_artist(artistName, spotify_client):
