@@ -6,8 +6,7 @@ import zlib
 
 import aiohttp
 
-import musicbot.bot_functions as bot_functions
-import musicbot.conf as conf
+from . import bot_functions, conf
 
 API_VERSION = 6
 
@@ -25,6 +24,7 @@ async def send_message(recipient_id, content, discord_client):
         "/users/@me/channels",
         "POST",
         json={"recipient_id": recipient_id})
+
     return await discord_client.api_call(
         f"/channels/{channel['id']}/messages",
         "POST",
@@ -34,31 +34,36 @@ async def send_message(recipient_id, content, discord_client):
 last_sequence = None
 
 
-async def heartbeat(webSocket, interval):
+async def heartbeat(web_socket, interval):
     """Keep alive the connexion with Discord."""
     while True:
         await asyncio.sleep(interval / 1000)
         print("> Heartbeat")
-        await webSocket.send_json({'op': HEARTBEAT,
+        await web_socket.send_json({'op': HEARTBEAT,
                                    'd': last_sequence})
 
 
-async def identify(webSocket, token):
+async def identify(web_socket, token):
     """Identifie the bot with the Web Socket (essential)."""
-    await webSocket.send_json({'op': IDENTIFY,
-                              'd': {'token': token,
-                                    'properties': {},
-                                    'compress': True,
-                                    'large_threshold': 250}})
+    json_object = {
+        'op': IDENTIFY,
+        'd': {
+            'token': token,
+            'properties': {},
+            'compress': True,
+            'large_threshold': 250
+        }
+    }
+    await web_socket.send_json(json_object)
 
 
-async def start_bot(webSocket, discord_client, spotify_client):
+async def start_bot(web_socket, discord_client, spotify_client):
     """Start the bot with the given Web Socket address."""
     global last_sequence  # global is necessary in order to modify the variable
     with aiohttp.ClientSession() as session:
         async with session.ws_connect(
-                f"{webSocket}?v=6&encoding=json") as webSocket:
-            async for msg in webSocket:
+                f"{web_socket}?v=6&encoding=json") as web_socket:
+            async for msg in web_socket:
                 if msg.tp == aiohttp.WSMsgType.TEXT:
                     data = json.loads(msg.data)
                 elif msg.tp == aiohttp.WSMsgType.BINARY:
@@ -69,9 +74,9 @@ async def start_bot(webSocket, discord_client, spotify_client):
                 if data['op'] == HELLO:
                     asyncio.ensure_future(
                         heartbeat(
-                            webSocket,
+                            web_socket,
                             data['d']['heartbeat_interval']))
-                    await identify(webSocket, discord_client.token)
+                    await identify(web_socket, discord_client.token())
 
                 elif data['op'] == HEARTBEAT_ACK:
                     print("< Heartbeat ACK")
@@ -83,8 +88,9 @@ async def start_bot(webSocket, discord_client, spotify_client):
                     if (data['t'] == "MESSAGE_CREATE" and
                        data['d']['channel_id'] == conf.CHANNEL_ID):
 
-                        # Make sure the command exist
                         data_partition = data['d']['content'].partition(' ')
+
+                        # Make sure the command exist
                         if dir(bot_functions).__contains__(data_partition[0]):
                             try:
                                 # Command without arg
@@ -101,6 +107,7 @@ async def start_bot(webSocket, discord_client, spotify_client):
 
                             # Send the retrieved data to the user,
                             #  not to the bot
+                            print(content)
                             await send_data(content, data, discord_client)
 
                         else:  # shows the user how to access help

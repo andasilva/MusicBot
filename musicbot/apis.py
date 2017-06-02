@@ -28,7 +28,7 @@ class DiscordClient(RestClient):
         self.endpoint = "https://discordapp.com/api"
         self.header = {
             "headers": {
-                "Authorization": f"Bot {self.token}",
+                "Authorization": f"Bot {self._token}",
                 "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
             }
         }
@@ -60,7 +60,7 @@ class SpotifyClient(RestClient):
         self.endpoint = "https://api.spotify.com/v1"
         self.header = {
             "headers": {
-                "Authorization": f"Bearer {self.token}",
+                "Authorization": f"Bearer {self._token}",
                 "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
             }
         }
