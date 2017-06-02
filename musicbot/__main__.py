@@ -13,7 +13,7 @@ async def mainLoop(discord_client, spotify_client):
     await start_bot(response['url'], discord_client, spotify_client)
 
 if __name__ == "__main__":
-    #Launch the program
+    # Launch the program
     discord_client = DiscordClient(conf.DISCORD_TOKEN)
     spotify_client = SpotifyClient(conf.S_TOKEN)
 

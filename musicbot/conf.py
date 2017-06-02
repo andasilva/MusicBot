@@ -36,7 +36,11 @@ S_URL = f"https://accounts.spotify.com/authorize/?" \
               f"user-read-email%20user-read-currently-playing&" \
               f"state=34fFs29kd09"
 
-S_SCOPE = """user-read-birthdate user-read-private user-read-email user-read-currently-playing user-modify-playback-state"""
+S_SCOPE = """user-read-birthdate
+             user-read-private
+             user-read-email
+             user-read-currently-playing
+             user-modify-playback-state"""
 
 S_TOKEN = spotipy.util.prompt_for_user_token('dr.sinity',
                                              scope=S_SCOPE,
