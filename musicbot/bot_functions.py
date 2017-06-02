@@ -5,7 +5,7 @@ from selenium import webdriver
 import musicbot.conf as conf
 
 
-async def searchArtist(artistName, spotify_client):
+async def search_artist(artistName, spotify_client):
     """Return various informations about the artist searched."""
     results = await spotify_client.api_call(
         f"/search?q={artistName}&type=artist")
@@ -18,7 +18,7 @@ async def searchArtist(artistName, spotify_client):
     return "Sorry, artist not found!"
 
 
-async def aboutMe(spotify_client):
+async def about_me(spotify_client):
     """Return various informations about the user."""
     results = await spotify_client.api_call("/me")
 
@@ -29,7 +29,7 @@ async def aboutMe(spotify_client):
            "\nUri: " + results['uri']
 
 
-async def currentlyPlaying(spotify_client):
+async def currently_playing(spotify_client):
     """Return which song is currently playing."""
     results = await spotify_client.api_call("/me/player/currently-playing")
 
@@ -46,35 +46,35 @@ async def currentlyPlaying(spotify_client):
 
 async def play(spotify_client):
     """Play for non premium users."""
-    if await (currentlyPlaying(spotify_client) !=
+    if await (currently_playing(spotify_client) !=
               "There is currently no music played."):
         return "Music's already playing."
 
-    return playPause('play')
+    return play_pause('play')
 
 
 async def pause(spotify_client):
     """Pause for non premium users."""
-    if await (currentlyPlaying(spotify_client) ==
+    if await (currently_playing(spotify_client) ==
               "There is currently no music played."):
         return "Music's already paused."
 
-    return playPause('pause')
+    return play_pause('pause')
 
 
-def playPause(command):
+def play_pause(command):
     """Start/Stop the music."""
-    if isDriverRunning() is True:
+    if is_driver_running() is True:
         playPause = conf.driver.find_element_by_class_name(
             f"spoticon-{command}-16")
         playPause.click()
         return {}
-    return isDriverRunning()
+    return is_driver_running()
 
 
 async def skip(command, *args):
     """Skip back/forward for non premium users."""
-    if isDriverRunning() is True:
+    if is_driver_running() is True:
         try:
             skip = conf.driver.find_element_by_class_name(
                 f"spoticon-skip-{command}-16")
@@ -85,12 +85,12 @@ async def skip(command, *args):
         except Exception:
             return """"Sorry, the only args avaiable for
                        'skip' are 'back' and 'forward'"""
-    return isDriverRunning()
+    return is_driver_running()
 
 
 async def vol(level, *args):
     """Set the  volume for non premium users."""
-    if isDriverRunning() is True:
+    if is_driver_running() is True:
         try:
             level = int(level)
             assert 0 <= level <= 100
@@ -103,7 +103,7 @@ async def vol(level, *args):
             return {}
         except Exception:
             return "Please, enter a number between 0 and 100"
-    return isDriverRunning()
+    return is_driver_running()
 
 
 ######################################
@@ -147,7 +147,7 @@ async def help(*args):
     Return informations about the music which is currently played.```
     ```- help:
       Display the help.```
-    ```- search artistName:
+    ```- search_artist artistName:
     Return various informations about the artist searched.```
     ```- skip back/forward:
       Can go to the next/previous track of the
@@ -172,7 +172,7 @@ async def help(*args):
 #  WEB DRIVER  #
 ################
 
-async def openSpotify(*args):
+async def open_spotify(*args):
     """Start a webdriver and go on Spotify wepage."""
     # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
     conf.driver = webdriver.Chrome()
@@ -192,7 +192,7 @@ async def openSpotify(*args):
     return {}
 
 
-def isDriverRunning():
+def is_driver_running():
     """Check if the driver is running."""
     if conf.driver is not None:
         return True

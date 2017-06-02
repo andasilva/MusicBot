@@ -8,7 +8,7 @@ class RestClient:
 
     def __init__(self, token):
         """Init rest client."""
-        self.token = token
+        self._token = token
 
     async def api_call(self, url, method="GET", **kwargs):
         """Abstract api_call function."""
@@ -16,7 +16,7 @@ class RestClient:
 
     def token(self):
         """Token getter."""
-        return self.token
+        return self._token
 
 
 class DiscordClient(RestClient):
@@ -43,7 +43,7 @@ class DiscordClient(RestClient):
                     f"{self.endpoint}{url}",
                     **kwargs) as response:
                 if response.status in (200, 204):
-                    return await httpResponseStatus(response)
+                    return await http_response_status(response)
                 else:
                     body = await response.text()
                     raise UnexpectedHttpStatusError(
@@ -75,7 +75,7 @@ class SpotifyClient(RestClient):
                     f"{self.endpoint}{url}",
                     **kwargs) as response:
                 if response.status in (200, 204):
-                    return await httpResponseStatus(response)
+                    return await http_response_status(response)
                 elif 403 == response.status:
                     return """You must have a premium Spotify
                               account for this feature."""
@@ -98,7 +98,7 @@ class UnexpectedHttpStatusError(Exception):
         self.body = body
 
 
-async def httpResponseStatus(response):
+async def http_response_status(response):
     """Handle common HTTP responses."""
     if 200 == response.status:
         return await response.json()
