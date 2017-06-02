@@ -1,4 +1,4 @@
-"""Music bot which can communicate with YouTube"""
+"""Music bot which can communicate with YouTube."""
 
 import asyncio
 import json
@@ -6,8 +6,8 @@ import zlib
 
 import aiohttp
 
-import bot_functions
-import conf
+import musicbot.bot_functions as bot_functions
+import musicbot.conf as conf
 
 API_VERSION = 6
 
@@ -52,7 +52,7 @@ async def identify(webSocket, token):
                                     'large_threshold': 250}})
 
 
-async def startBot(webSocket, discord_client, spotify_client):
+async def start_bot(webSocket, discord_client, spotify_client):
     """Start the bot with the given Web Socket address."""
     global last_sequence  # global is necessary in order to modify the variable
     with aiohttp.ClientSession() as session:
@@ -101,23 +101,22 @@ async def startBot(webSocket, discord_client, spotify_client):
 
                             # Send the retrieved data to the user,
                             #  not to the bot
-                            await sendData(content, data, discord_client)
+                            await send_data(content, data, discord_client)
 
                         else:  # shows the user how to access help
                             content = """Sorry, I don't know this command.
                                          You can try 'help' for
                                          more informations."""
 
-                            await sendData(content, data, discord_client)
+                            await send_data(content, data, discord_client)
                     else:
                         print('Todo?', data['t'])
                 else:
                     print("Unknown?", data)
 
 
-async def sendData(content, data, discord_client):
+async def send_data(content, data, discord_client):
     """Send the retrieved data to the user, not to the bot."""
-
     if data['d']['author']['username'] != 'music-bot':
         asyncio.ensure_future(
             send_message(
