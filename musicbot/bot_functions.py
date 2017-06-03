@@ -3,9 +3,10 @@
 from urllib.parse import urlencode
 
 from selenium import webdriver
-from conf import reset_config
+from musicbot.conf import reset_config
 
-import settings
+import musicbot.settings
+
 
 async def reset(*args):
     """Reset bot settings"""
@@ -87,7 +88,7 @@ async def pause(*args):
 def play_pause(command):
     """Start/Stop the music."""
     if is_driver_running() is True:
-        playPause = settings.driver.find_element_by_class_name(
+        playPause = musicbot.settings.driver.find_element_by_class_name(
             f"spoticon-{command}-16")
         playPause.click()
         return {}
@@ -102,7 +103,7 @@ async def skip(*args):
     if is_driver_running() is True:
         try:
             print(*args)
-            skip = settings.driver.find_element_by_class_name(
+            skip = musicbot.settings.driver.find_element_by_class_name(
                 f"spoticon-skip-{command}-16"
             )
             skip.click()
@@ -123,10 +124,10 @@ async def vol(*args):
         try:
             level = int(level)
             assert 0 <= level <= 100
-            volume = settings.driver.find_elements_by_class_name(
+            volume = musicbot.settings.driver.find_elements_by_class_name(
                 "progress-bar__fg"
             )[1]
-            actions = settings.webdriver.ActionChains(settings.driver)
+            actions = musicbot.settings.webdriver.ActionChains(musicbot.settings.driver)
             actions.move_to_element_with_offset(volume, level, 0)
             actions.click()
             actions.perform()
@@ -214,17 +215,17 @@ async def help(*args):
 async def open_spotify(*args):
     """Start a webdriver and go on Spotify wepage."""
     # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
-    settings.driver = webdriver.Chrome()
-    settings.driver.get("https://open.spotify.com/browse/featured")
+    musicbot.settings.driver = webdriver.Chrome()
+    musicbot.settings.driver.get("https://open.spotify.com/browse/featured")
 
-    hasAccount = settings.driver.find_element_by_id('has-account')
+    hasAccount = musicbot.settings.driver.find_element_by_id('has-account')
     hasAccount.click()
 
-    loginUsr = settings.driver.find_element_by_id('login-usr')
+    loginUsr = musicbot.settings.driver.find_element_by_id('login-usr')
     loginUsr.clear()
     loginUsr.send_keys("")  # Optional
 
-    loginPass = settings.driver.find_element_by_id('login-pass')
+    loginPass = musicbot.settings.driver.find_element_by_id('login-pass')
     loginPass.clear()
     loginPass.send_keys("")  # Optional
 
@@ -233,4 +234,4 @@ async def open_spotify(*args):
 
 def is_driver_running():
     """Check if the driver is running."""
-    return settings.driver is not None
+    return musicbot.settings.driver is not None
