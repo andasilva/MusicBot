@@ -6,7 +6,7 @@ import zlib
 
 import aiohttp
 
-from . import bot_functions, conf
+import bot_functions, settings
 
 API_VERSION = 6
 
@@ -91,7 +91,7 @@ async def start_bot(web_socket, discord_client, spotify_client):
 
                     # Make sure we're in the right channel
                     if (data['t'] == "MESSAGE_CREATE" and
-                       data['d']['channel_id'] == conf.CHANNEL_ID):
+                       data['d']['channel_id'] == settings.CHANNEL_ID):
 
                         data_partition = data['d']['content'].partition(' ')
 

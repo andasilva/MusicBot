@@ -3,8 +3,14 @@
 from urllib.parse import urlencode
 
 from selenium import webdriver
+from conf import reset_config
 
-from . import conf
+import settings
+
+async def reset(*args):
+    """Reset bot settings"""
+    reset_config()
+    return "Settings reset. Reboot the bot to configure the settings."
 
 
 async def search_artist(*args):
@@ -81,7 +87,7 @@ async def pause(*args):
 def play_pause(command):
     """Start/Stop the music."""
     if is_driver_running() is True:
-        playPause = conf.driver.find_element_by_class_name(
+        playPause = settings.driver.find_element_by_class_name(
             f"spoticon-{command}-16")
         playPause.click()
         return {}
@@ -96,7 +102,7 @@ async def skip(*args):
     if is_driver_running() is True:
         try:
             print(*args)
-            skip = conf.driver.find_element_by_class_name(
+            skip = settings.driver.find_element_by_class_name(
                 f"spoticon-skip-{command}-16"
             )
             skip.click()
@@ -117,10 +123,10 @@ async def vol(*args):
         try:
             level = int(level)
             assert 0 <= level <= 100
-            volume = conf.driver.find_elements_by_class_name(
+            volume = settings.driver.find_elements_by_class_name(
                 "progress-bar__fg"
             )[1]
-            actions = conf.webdriver.ActionChains(conf.driver)
+            actions = settings.webdriver.ActionChains(settings.driver)
             actions.move_to_element_with_offset(volume, level, 0)
             actions.click()
             actions.perform()
@@ -174,6 +180,8 @@ async def help(*args):
     results = """
     ```- about_me:
     Return various information about the user.```
+    ```- reset:
+    Reconfigure application settings (bot reboot required).```
     ```- currently_playing:
     Return informations about the music which is currently played.```
     ```- help:
@@ -206,17 +214,17 @@ async def help(*args):
 async def open_spotify(*args):
     """Start a webdriver and go on Spotify wepage."""
     # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
-    conf.driver = webdriver.Chrome()
-    conf.driver.get("https://open.spotify.com/browse/featured")
+    settings.driver = webdriver.Chrome()
+    settings.driver.get("https://open.spotify.com/browse/featured")
 
-    hasAccount = conf.driver.find_element_by_id('has-account')
+    hasAccount = settings.driver.find_element_by_id('has-account')
     hasAccount.click()
 
-    loginUsr = conf.driver.find_element_by_id('login-usr')
+    loginUsr = settings.driver.find_element_by_id('login-usr')
     loginUsr.clear()
     loginUsr.send_keys("")  # Optional
 
-    loginPass = conf.driver.find_element_by_id('login-pass')
+    loginPass = settings.driver.find_element_by_id('login-pass')
     loginPass.clear()
     loginPass.send_keys("")  # Optional
 
@@ -225,4 +233,4 @@ async def open_spotify(*args):
 
 def is_driver_running():
     """Check if the driver is running."""
-    return conf.driver is not None
+    return settings.driver is not None

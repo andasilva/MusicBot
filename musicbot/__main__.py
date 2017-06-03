@@ -1,10 +1,10 @@
 """Main program."""
-
+import sys
 import asyncio
-
-import musicbot.conf as conf
-from musicbot.apis import DiscordClient, SpotifyClient
-from musicbot.bot import start_bot
+import settings
+from apis import DiscordClient, SpotifyClient
+from bot import start_bot
+from conf import reconfigure, config
 
 
 async def main_loop(discord_client, spotify_client):
@@ -12,10 +12,18 @@ async def main_loop(discord_client, spotify_client):
     response = await discord_client.api_call("/gateway")
     await start_bot(response['url'], discord_client, spotify_client)
 
+
 if __name__ == "__main__":
     # Launch the program
-    discord_client = DiscordClient(conf.DISCORD_TOKEN)
-    spotify_client = SpotifyClient(conf.S_TOKEN)
+    if len(sys.argv) > 1 and sys.argv[1] == 'reset':
+        # Reconfigure settings of the applications
+        reconfigure()
+    else:
+        # Check if settings are configured (and perform a configuration if needed)
+        config()
+
+    discord_client = DiscordClient(settings.DISCORD_TOKEN)
+    spotify_client = SpotifyClient(settings.S_TOKEN)
 
     loop = asyncio.get_event_loop()
     loop.set_debug(True)
