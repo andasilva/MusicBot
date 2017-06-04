@@ -37,8 +37,8 @@ Installation
 
     $ pip install musicbot
 
-Installation
-------------
+Running
+-------
 
 .. code-block:: console
 
