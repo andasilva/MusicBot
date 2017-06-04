@@ -42,7 +42,7 @@ Running
 
 .. code-block:: console
 
-    $ python -m musicbot
+    $ python -m discord-musicbot
 
 If you entered wrong user credentials, you can restart
 the configuration as follows:
