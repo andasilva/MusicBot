@@ -37,7 +37,23 @@ Requirements
 Installation
 ------------
 
-TODO...
+.. code-block:: console
+
+    $ pip install musicbot
+
+Running
+-------
+
+.. code-block:: console
+
+    $ python -m musicbot
+
+If you entered wrong user credentials, you can restart
+the configuration as follows:
+
+.. code-block:: console
+
+    $ python -m musicbot reset
 
 Configuration
 -------------

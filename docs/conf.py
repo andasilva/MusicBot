@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # MusicBot documentation build configuration file, created by
@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'MusicBot'
-copyright = '2017, AndrÃ© Da Silva et Quentin Vaucher'
-author = 'AndrÃ© Da Silva et Quentin Vaucher'
+copyright = '2017, André Da Silva et Quentin Vaucher'
+author = 'André Da Silva et Quentin Vaucher'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
