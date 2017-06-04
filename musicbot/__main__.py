@@ -1,8 +1,7 @@
 """Main program."""
 
-import sys
-
 import asyncio
+import sys
 
 import musicbot.settings
 from musicbot.apis import DiscordClient, SpotifyClient
