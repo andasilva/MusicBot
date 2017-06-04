@@ -1,10 +1,11 @@
 """Configurations functions."""
 
 import tempfile
+import importlib
 
 import spotipy.util
 
-import musicbot.settings
+import settings
 
 
 def reset_config():
@@ -69,19 +70,22 @@ def save_config(attribute, value):
 
 def config():
     """Configures the settings."""
-    musicbot.settings.CHANNEL_ID = musicbot.settings.CHANNEL_ID \
-        if musicbot.settings.CHANNEL_ID != '' else save_channel_id()
-    musicbot.settings.DISCORD_TOKEN = musicbot.settings.DISCORD_TOKEN \
-        if musicbot.settings.DISCORD_TOKEN != '' else save_discord_token()
-    musicbot.settings.S_CLIENT_ID = musicbot.settings.S_CLIENT_ID \
-        if musicbot.settings.S_CLIENT_ID != '' else save_spotify_id()
-    musicbot.settings.S_CLIENT_SECRET = musicbot.settings.S_CLIENT_SECRET \
-        if musicbot.settings.S_CLIENT_SECRET != '' \
-        else save_spotify_client_secret()
 
-    musicbot.settings.S_TOKEN = spotipy.util. \
-        prompt_for_user_token('...',
-                              scope=musicbot.settings.S_SCOPE,
-                              client_id=musicbot.settings.S_CLIENT_ID,
-                              client_secret=musicbot.settings.S_CLIENT_SECRET,
-                              redirect_uri=musicbot.settings.S_REDIRECT_URI)
+    settings_dict = {
+        'CHANNEL_ID': [settings.CHANNEL_ID, save_channel_id],
+        'DISCORD_TOKEN': [settings.DISCORD_TOKEN, save_discord_token],
+        'S_CLIENT_ID': [settings.S_CLIENT_ID, save_spotify_id],
+        'S_CLIENT_SECRET': [settings.S_CLIENT_SECRET, save_spotify_client_secret]
+    }
+
+    for key in settings_dict.values():
+        if not key[0]:
+            key[1]()
+            importlib.reload(settings)
+
+    settings.S_TOKEN = spotipy.util. \
+        prompt_for_user_token('userSpotify',
+                              scope=settings.S_SCOPE,
+                              client_id=settings.S_CLIENT_ID,
+                              client_secret=settings.S_CLIENT_SECRET,
+                              redirect_uri=settings.S_REDIRECT_URI)

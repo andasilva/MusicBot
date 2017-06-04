@@ -3,5 +3,5 @@
 import sys
 
 
-if sys.version_info < (3, 5):
+if sys.version_info < (3, 6):
     raise ImportError("MusicBot requires Python 3.6+.")
