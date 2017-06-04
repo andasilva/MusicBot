@@ -6,8 +6,7 @@ import zlib
 
 import aiohttp
 
-from . import bot_functions
-from . import settings
+from . import bot_functions, settings
 
 API_VERSION = 6
 
