@@ -1,8 +1,10 @@
 """Main program."""
 
-import asyncio
-import musicbot.settings
 import sys
+
+import asyncio
+
+import musicbot.settings
 from musicbot.apis import DiscordClient, SpotifyClient
 from musicbot.bot import start_bot
 from musicbot.conf import config, reconfigure
