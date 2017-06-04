@@ -10,6 +10,10 @@ MusicBot's documentation
       :target: https://travis-ci.org/andasilva/MusicBot
       :alt: Build Status
 
+.. image:: https://img.shields.io/pypi/dd/discord-musicbot.svg
+	  :target: https://pypi.python.org/pypi/discord-musicbot
+	  :alt: PyPi Downloads
+	  
 .. image:: https://img.shields.io/github/stars/andasilva/musicbot.svg
    :target: https://github.com/andasilva/musicbot/stargazers
    :alt: GitHub Stars
@@ -37,7 +41,23 @@ Requirements
 Installation
 ------------
 
-TODO...
+.. code-block:: console
+
+    $ pip install musicbot
+
+Running
+-------
+
+.. code-block:: console
+
+    $ python -m musicbot
+
+If you entered wrong user credentials, you can restart
+the configuration as follows:
+
+.. code-block:: console
+
+    $ python -m musicbot reset
 
 Configuration
 -------------
