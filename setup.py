@@ -11,7 +11,7 @@ with open(path.join(here, 'README.rst'), 'r', encoding='utf-8') as f:
 
 setup(
     name='discord-musicbot',
-    version='0.0.1.dev20170604',  # see PEP-0440
+    version='0.0.2.dev20170604',  # see PEP-0440
     python_requires='>=3.6',
     author='Quentin Vaucher de la Croix & Neto da Silva André',
     author_email='quentin.vaucher@he-arc.ch & andre.netodasilva@he-arc.ch',
@@ -22,7 +22,7 @@ setup(
     packages=find_packages(exclude=('contrib', 'docs', 'tests')),
     keywords='discord asyncio bot',
     classifiers=(
-        'Development Status :: 1 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Intended Audience :: Education',
         'Operating System :: MacOS :: MacOS X',
@@ -31,7 +31,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Topic :: entertainment'
+        'Topic :: Multimedia :: Sound/Audio'
     ),
     install_requires=(
         'spotipy>=2.4.4',
