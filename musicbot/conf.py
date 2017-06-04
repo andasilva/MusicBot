@@ -59,7 +59,7 @@ def save_config(attribute, value):
     __location__ = os.path.realpath(
         os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-    with open(os.path.join(__location__,"settings.py"), "r") as f:
+    with open(os.path.join(__location__, "settings.py"), "r") as f:
         for line in f:
             if line[:len(attribute)] == attribute:
                 tmp.write(attribute + " = " + "'" + value + "'\n")
@@ -68,7 +68,7 @@ def save_config(attribute, value):
     # rewind at the beginning of the tmp file
     tmp.seek(0)
 
-    with open(os.path.join(__location__,"settings.py"), "w") as f:
+    with open(os.path.join(__location__, "settings.py"), "w") as f:
         for line in tmp:
             f.write(line)
 
