@@ -1,11 +1,9 @@
 """Bot functions."""
 
-from urllib.parse import urlencode
-
-from selenium import webdriver
-from musicbot.conf import reset_config
-
 import musicbot.settings
+from musicbot.conf import reset_config
+from selenium import webdriver
+from urllib.parse import urlencode
 
 
 async def reset(*args):

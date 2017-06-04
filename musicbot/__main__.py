@@ -1,11 +1,11 @@
 """Main program."""
 
-import sys
 import asyncio
 import musicbot.settings
+import sys
 from musicbot.apis import DiscordClient, SpotifyClient
 from musicbot.bot import start_bot
-from musicbot.conf import reconfigure, config
+from musicbot.conf import config, reconfigure
 
 
 async def main_loop(discord_client, spotify_client):
