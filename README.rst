@@ -53,4 +53,4 @@ Bibliography
 - `A Discord bot with asyncio <https://tutorials.botsfloor.com/a-discord-bot-with-asyncio-359a2c99e256>`_
 - `Discord API Reference <https://discordapp.com/developers/docs/reference>`_
 - `Spotify API Reference <https://developer.spotify.com/web-api>`_
-- `Travisbos <https://github.com/greut/travisbot>`_
+- `Travisbot <https://github.com/greut/travisbot>`_
