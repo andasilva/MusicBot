@@ -1,8 +1,10 @@
 """Configurations functions."""
 
-import musicbot.settings
-import spotipy.util
 import tempfile
+
+import spotipy.util
+
+import musicbot.settings
 
 
 def reset_config():
