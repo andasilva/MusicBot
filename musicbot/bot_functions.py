@@ -127,7 +127,8 @@ async def vol(*args):
             volume = musicbot.settings.driver.find_elements_by_class_name(
                 "progress-bar__fg"
             )[1]
-            actions = musicbot.settings.webdriver.ActionChains(musicbot.settings.driver)
+            actions = musicbot.settings.webdriver.\
+                ActionChains(musicbot.settings.driver)
             actions.move_to_element_with_offset(volume, level, 0)
             actions.click()
             actions.perform()
