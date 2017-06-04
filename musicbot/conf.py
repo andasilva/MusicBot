@@ -76,8 +76,9 @@ def config():
         if musicbot.settings.S_CLIENT_SECRET != '' \
         else save_spotify_client_secret()
 
-    musicbot.settings.S_TOKEN = spotipy.util.prompt_for_user_token('...',
-                                                                   scope=musicbot.settings.S_SCOPE,
-                                                                   client_id=musicbot.settings.S_CLIENT_ID,
-                                                                   client_secret=musicbot.settings.S_CLIENT_SECRET,
-                                                                   redirect_uri=musicbot.settings.S_REDIRECT_URI)
+    musicbot.settings.S_TOKEN = spotipy.util. \
+        prompt_for_user_token('...',
+                              scope=musicbot.settings.S_SCOPE,
+                              client_id=musicbot.settings.S_CLIENT_ID,
+                              client_secret=musicbot.settings.S_CLIENT_SECRET,
+                              redirect_uri=musicbot.settings.S_REDIRECT_URI)
