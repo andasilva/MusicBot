@@ -6,8 +6,8 @@ import zlib
 
 import aiohttp
 
-import musicbot.bot_functions
-import musicbot.settings as settings
+import bot_functions
+import settings
 
 API_VERSION = 6
 
@@ -97,11 +97,11 @@ async def start_bot(web_socket, discord_client, spotify_client):
                         data_partition = data['d']['content'].partition(' ')
 
                         # Make sure the command exist
-                        if dir(musicbot.bot_functions).__contains__(
+                        if dir(bot_functions).__contains__(
                                 data_partition[0]):
 
                             content = await getattr(
-                                musicbot.bot_functions,
+                                bot_functions,
                                 data_partition[0]
                             )(spotify_client, data_partition[2])
 
