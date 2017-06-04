@@ -6,19 +6,19 @@
 
 driver = None
 
-CHANNEL_ID = ''
+CHANNEL_ID = '314731498622156801'
 
 ########################
 #   DISCORD SETTINGS   #
 ########################
 
-DISCORD_TOKEN = ''
+DISCORD_TOKEN = 'MzEyMTcwNjk2MTQ5MTcyMjI1.C_79Dg.sNdHiMqcsPkVZ3c83uxwmvBmsyc'
 ########################
 #   SPOTIFY SETTINGS   #
 ########################
 
-S_CLIENT_ID = ''
-S_CLIENT_SECRET = ''
+S_CLIENT_ID = '8418c11670bf4f88ae726dffed1eb90c'
+S_CLIENT_SECRET = '2ca944e840764319888740d1ecd4e2d0'
 S_REDIRECT_URI = 'https://discordapp.com/channels/@me'
 
 S_URL = f"https://accounts.spotify.com/authorize/?" \

@@ -4,8 +4,8 @@ from urllib.parse import urlencode
 
 from selenium import webdriver
 
-import settings
-from conf import reset_config
+from . import settings
+from .conf import reset_config
 
 
 async def reset(*args):
