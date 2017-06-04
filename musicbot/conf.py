@@ -75,7 +75,8 @@ def config():
         'CHANNEL_ID': [settings.CHANNEL_ID, save_channel_id],
         'DISCORD_TOKEN': [settings.DISCORD_TOKEN, save_discord_token],
         'S_CLIENT_ID': [settings.S_CLIENT_ID, save_spotify_id],
-        'S_CLIENT_SECRET': [settings.S_CLIENT_SECRET, save_spotify_client_secret]
+        'S_CLIENT_SECRET': [settings.S_CLIENT_SECRET,
+                            save_spotify_client_secret]
     }
 
     for key in settings_dict.values():
