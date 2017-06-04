@@ -70,7 +70,6 @@ def save_config(attribute, value):
 
 def config():
     """Configures the settings."""
-
     settings_dict = {
         'CHANNEL_ID': [settings.CHANNEL_ID, save_channel_id],
         'DISCORD_TOKEN': [settings.DISCORD_TOKEN, save_discord_token],
