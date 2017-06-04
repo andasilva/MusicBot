@@ -43,7 +43,7 @@ Installation
 
 .. code-block:: console
 
-    $ pip install musicbot
+    $ pip install discord-musicbot
 
 Running
 -------
