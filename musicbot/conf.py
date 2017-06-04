@@ -1,7 +1,7 @@
 """Configurations functions."""
 
-import tempfile
 import importlib
+import tempfile
 
 import spotipy.util
 
