@@ -14,9 +14,10 @@ MusicBot's documentation
    :target: https://github.com/andasilva/musicbot/stargazers
    :alt: GitHub Stars
 
-.. image:: https://img.shields.io/badge/docs-unknown%20version-yellow.svg?style=flat
-  :target: http://musicbot.readthedocs.io/en/latest/?badge=latest
-  :alt: Documentation Status
+.. image:: https://readthedocs.org/projects/musicbot/badge/?version=latest
+   :target: http://musicbot.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+   
 
 Discord bot made with Python which is aimed to control Spotify.
 
