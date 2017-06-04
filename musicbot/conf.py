@@ -1,4 +1,4 @@
-"""Configurations functions"""
+"""Configurations functions."""
 
 import spotipy
 import musicbot.settings

@@ -9,7 +9,7 @@ import musicbot.settings
 
 
 async def reset(*args):
-    """Reset bot settings"""
+    """Reset bot settings."""
     reset_config()
     return "Settings reset. Reboot the bot to configure the settings."
 
