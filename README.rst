@@ -35,14 +35,14 @@ Installation
 
 .. code-block:: console
 
-    $ pip install musicbot
+    $ pip install discord-musicbot
 
 Running
 -------
 
 .. code-block:: console
 
-    $ python -m discord-musicbot
+    $ python -m musicbot
 
 If you entered wrong user credentials, you can restart
 the configuration as follows:
