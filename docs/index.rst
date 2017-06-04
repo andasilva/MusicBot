@@ -1,19 +1,23 @@
-========
-MusicBot
-========
+MusicBot's documentation
+=========================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
 
 .. image:: https://travis-ci.org/andasilva/MusicBot.svg?branch=master
-   :target: https://travis-ci.org/andasilva/MusicBot
-   :alt: Build Status
+      :target: https://travis-ci.org/andasilva/MusicBot
+      :alt: Build Status
 
 .. image:: https://img.shields.io/github/stars/andasilva/musicbot.svg
-  :target: https://github.com/andasilva/musicbot/stargazers
-  :alt: GitHub Stars
+   :target: https://github.com/andasilva/musicbot/stargazers
+   :alt: GitHub Stars
 
 .. image:: https://readthedocs.org/projects/musicbot/badge/?version=latest
    :target: http://musicbot.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-
+   
 
 Discord bot made with Python which is aimed to control Spotify.
 
@@ -63,3 +67,11 @@ Bibliography
 - `Discord API Reference <https://discordapp.com/developers/docs/reference>`_
 - `Spotify API Reference <https://developer.spotify.com/web-api>`_
 - `Travisbot <https://github.com/greut/travisbot>`_
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
