@@ -6,6 +6,10 @@ MusicBot
    :target: https://travis-ci.org/andasilva/MusicBot
    :alt: Build Status
 
+.. image:: https://img.shields.io/pypi/dd/discord-musicbot.svg
+	  :target: https://pypi.python.org/pypi/discord-musicbot
+	  :alt: PyPi Downloads
+	  
 .. image:: https://img.shields.io/github/stars/andasilva/musicbot.svg
   :target: https://github.com/andasilva/musicbot/stargazers
   :alt: GitHub Stars
