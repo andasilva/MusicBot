@@ -1,4 +1,5 @@
 """Main program."""
+
 import sys
 import asyncio
 import musicbot.settings

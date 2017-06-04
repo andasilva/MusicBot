@@ -1,4 +1,5 @@
 """Configurations functions"""
+
 import spotipy
 import musicbot.settings
 import tempfile
@@ -15,7 +16,6 @@ def reset_config():
 
 def reconfigure():
     """Reconfigure all necessary attributes on settings.py"""
-
     print("Please insert the following information: ")
     save_channel_id()
     save_discord_token()
@@ -24,28 +24,31 @@ def reconfigure():
 
 
 def save_channel_id():
+    """Save channel id"""
     result = input("Channel ID of the bot:")
     save_config("CHANNEL_ID", result)
 
 
 def save_discord_token():
+    """Save Discord token"""
     result = input("Token Discord:")
     save_config("DISCORD_TOKEN", result)
 
 
 def save_spotify_id():
+    """Save Spotify id"""
     result = input("Spotify ID:")
     save_config("S_CLIENT_ID", result)
 
 
 def save_spotify_client_secret():
+    """Save Spotify client secret"""
     result = input("Spotify Client Secret:")
     save_config("S_CLIENT_SECRET", result)
 
 
 def save_config(attribute, value):
-    """save an attribute value to the config file"""
-
+    """Save an attribute value to the config file"""
     # temp file to copy settings.py
     tmp = tempfile.NamedTemporaryFile(mode="r+")
 
