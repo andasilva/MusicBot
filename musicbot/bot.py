@@ -7,7 +7,7 @@ import zlib
 import aiohttp
 
 import musicbot.bot_functions
-import musicbot.settings
+import musicbot.settings as settings
 
 API_VERSION = 6
 
@@ -92,13 +92,12 @@ async def start_bot(web_socket, discord_client, spotify_client):
 
                     # Make sure we're in the right channel
                     if (data['t'] == "MESSAGE_CREATE" and
-                       data['d']['channel_id'] == musicbot.settings.CHANNEL_ID):
+                       data['d']['channel_id'] == settings.CHANNEL_ID):
 
                         data_partition = data['d']['content'].partition(' ')
 
                         # Make sure the command exist
-                        if dir(musicbot.bot_functions).\
-                                __contains__(data_partition[0]):
+                        if dir(musicbot.bot_functions).__contains__(data_partition[0]):
 
                             content = await getattr(
                                 musicbot.bot_functions,
