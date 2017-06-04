@@ -1,11 +1,12 @@
 """Configurations functions."""
 
 import importlib
+import os
 import tempfile
 
 import spotipy.util
 
-import settings
+from . import settings
 
 
 def reset_config():
@@ -23,6 +24,7 @@ def reconfigure():
     save_discord_token()
     save_spotify_id()
     save_spotify_client_secret()
+    importlib.reload(settings)
 
 
 def save_channel_id():
@@ -54,7 +56,10 @@ def save_config(attribute, value):
     # temp file to copy settings.py
     tmp = tempfile.NamedTemporaryFile(mode="r+")
 
-    with open("settings.py", "r") as f:
+    __location__ = os.path.realpath(
+        os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+    with open(os.path.join(__location__, "settings.py"), "r") as f:
         for line in f:
             if line[:len(attribute)] == attribute:
                 tmp.write(attribute + " = " + "'" + value + "'\n")
@@ -63,7 +68,7 @@ def save_config(attribute, value):
     # rewind at the beginning of the tmp file
     tmp.seek(0)
 
-    with open("settings.py", "w") as f:
+    with open(os.path.join(__location__, "settings.py"), "w") as f:
         for line in tmp:
             f.write(line)
 

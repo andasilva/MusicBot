@@ -3,10 +3,10 @@
 import asyncio
 import sys
 
-import settings
-from apis import DiscordClient, SpotifyClient
-from bot import start_bot
-from conf import config, reconfigure
+from . import settings
+from .apis import DiscordClient, SpotifyClient
+from .bot import start_bot
+from .conf import config, reconfigure
 
 
 async def main_loop(discord_client, spotify_client):
