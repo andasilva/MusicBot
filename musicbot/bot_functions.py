@@ -213,7 +213,7 @@ async def help(*args):
 #  WEB DRIVER  #
 ################
 
-def open_spotify(*args):
+async def open_spotify(*args):
     """Start a webdriver and go on Spotify wepage."""
     # chromedriver in PATH / for Firefox:  webdriver.Firefox() (+ geckodriver)
     settings.driver = webdriver.Chrome()
