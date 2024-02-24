@@ -22,7 +22,7 @@ MusicBot
 Discord bot made with Python which is aimed to control Spotify.
 
 Getting started
-================
+===============
 
 Explanations for setting up and running the bot.
 
